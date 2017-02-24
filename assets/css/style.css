@@ -1,0 +1,29 @@
+.fighters{
+ display: inline-block;
+ border-style: solid;
+ background: white;
+ text-align: center;
+ width:150px;
+ height:150px;
+}
+
+body {
+background: black;
+}
+
+.fighters-image{
+width: 100px;
+height: 100px;
+}
+
+.container {
+  width: 100%;
+  max-width: 960px;
+  background: url("../images/backgrd.png");
+  height: auto;
+  padding-bottom: 150px;
+}
+
+h1 {
+	margin-left: 600px;
+	}
