@@ -65,9 +65,8 @@ $(document).ready(function(){
           characterToPlay.append(image);
 
           // then give each "characterToPlay" a text equal to "name and hp".
-          //characterToPlay.text(this.fightersToPick[objKeys[i]].healthPower);
+          characterToPlay.text(this.fightersToPick[objKeys[i]].healthPower);
           characterToPlay.text(this.fightersToPick[objKeys[i]].name);
-          $("characterToPlay").append(this.fightersToPick[objKeys[i]].healthPower);
           // Finally, append each "letterBtn" to the "#buttons" div (provided).
           
           $(".fightersToPick").append(characterToPlay);
