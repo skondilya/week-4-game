@@ -7,6 +7,36 @@
  height:150px;
 }
 
+.player{
+ display: inline-block;
+ border-style: solid;
+ background: white;
+ text-align: center;
+ width:150px;
+ height:150px;
+ background: white;
+}
+
+.enemy{
+display: inline-block;
+ border-style: solid;
+ background: white;
+ text-align: center;
+ width:150px;
+ height:150px;
+ background: red;
+}
+
+.defenders{
+display: inline-block;
+ border-style: solid;
+ background: white;
+ text-align: center;
+ width:150px;
+ height:150px;
+ background:black;	
+}
+
 body {
 background: black;
 }

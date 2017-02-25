@@ -2,132 +2,128 @@
 $(document).ready(function(){
       //game starts 
       //fighter's picture 
-      //each character has three attributes: HP; attack pt, counter attack points. differs for each character
-      // Creating an object that will house all of our logic and variables.
-    var rpgGame = {
-
-      // Object of all fighters that can be chosen, along with info such as their picture and powers.
-      fightersToPick: {
-        f1: {
-        name:"Obi-Wan Kenobi",
-        picture: "../images/ch-1.jpg",
-        healthPower : 120,
-        attackPower : 8,
-        counterAttackPower : 6,
-        },
-        f2: {
-          name: "Luke Skywalker",
-          picture: "../images/ch-2.jpg",
-          healthPower : 100,
-          attackPower : 10,
-          counterAttackPower : 5,
-        },
-        f3: {
-          name: "Darth Sidious",
-          picture: "../images/ch-3.png",
-          healthPower : 150,
-          attackPower : 5,
-          counterAttackPower : 20,
-        },
-        f4: {
-          name : "Darth Maul",
-          picture: "../images/ch-4.png",
-          healthPower : 180,
-          attackPower :6,
-          counterAttackPower : 25,
-        }
-      
-      },
-
-      // The setupGame method is called when the page first loads.
-      setupGame: function() {
-        var objKeys = Object.keys(this.fightersToPick);
-
-        for (var i = 0; i < objKeys.length; i++) {
-        
-          // Inside the loop...
-
-
-          // 2. Create a variable named "characterToPlay" equal to $("<div>");
+      //each character has three attributes: HP; attack pt, counter attck points. differs for each character
+      // Creating an function that assigns character name, hp,AP,counter AP, container, styyle class.
+    var drawCharacter = function(character, container, styleclass){
           var characterToPlay = $("<div>");
 
-          // 3. Then give each "characterToPlay" the following classes: "" "" "".
-          characterToPlay.addClass("fighters");
+          // 3. Then give each "characterToPlay" the style classes.
+          characterToPlay.addClass(styleclass);
           
-          // 4. Then give each "characterToPlay" a data-attribute called "data-power".
-          characterToPlay.attr("data-n",this.fightersToPick[objKeys[i]].name);
-          characterToPlay.attr("data-hp",this.fightersToPick[objKeys[i]].healthPower);
-          characterToPlay.attr("data-ap",this.fightersToPick[objKeys[i]].attackPower);
-          characterToPlay.attr("data-cap",this.fightersToPick[objKeys[i]].counterAttackPower);
-          // Each fifhter will be given a src link to the image
+          // 4. Then give each "characterToPlay" data-attribute.
+          //console.log(character.name);
+          characterToPlay.attr("name",character.name);
+          characterToPlay.attr("data-n",character.name);
+          characterToPlay.attr("data-hp",character.healthPower);
+          characterToPlay.attr("data-ap",character.attackPower);
+          characterToPlay.attr("data-cap",character.counterAttackPower);
+          // Each fighter will be given a src link to the image
           var image = $("<img>");
-          image.attr("src",this.fightersToPick[objKeys[i]].picture);
+          image.attr("src",character.picture);
+          image.addClass("fighters-image");
           characterToPlay.append(image);
+          //appending the name and hp to the fighter container 
+          var theName = $("<div>");
+          theName.append(character.name);
+          characterToPlay.append(theName);
 
-          // then give each "characterToPlay" a text equal to "name and hp".
-          characterToPlay.text(this.fightersToPick[objKeys[i]].healthPower);
-          characterToPlay.text(this.fightersToPick[objKeys[i]].name);
-          // Finally, append each "letterBtn" to the "#buttons" div (provided).
-          
-          $(".fightersToPick").append(characterToPlay);
-    
+          var theHP = $("<div>");
+          theHP.append(character.healthPower);
+          characterToPlay.append(theHP);
+          // appending fighters to different container. 
+          container.append(characterToPlay);
+    };
+    // function similar to drawCharacter with the for loop - will give all the fighters together
+    var drawCharacters = function(characters, container, styleclass){
+        for (var i = 0; i < characters.length; i++) {
+          drawCharacter(characters[i], container, styleclass);
         }
-      },
-
-      // Function that "restarts" the game by resetting all of the variables.
-      restartGame: function() {
-      },
-
-      // Function that checks to see if the user has won.
-      updateWins: function() {
-      }
-    }
-
-
-
-    //Create an "on-click" event attached to the ".fighter" class.
-    $(".fighters").on("click", function() {
+    };
     
+    // array of all fighters that can be chosen, along with info such as their picture and powers.
+    var fightersToPick= [];
+    fightersToPick.push({
+    name:"Obi-Wan Kenobi",
+    picture: "assets/images/ch-1.jpg",
+    healthPower : 120,
+    attackPower : 8,
+    counterAttackPower : 6,
+    });
+    fightersToPick.push({
+      name: "Luke Skywalker",
+      picture: "assets/images/ch-2.jpg",
+      healthPower : 100,
+      attackPower : 10,
+      counterAttackPower : 5,
+    });
+    fightersToPick.push({
+      name: "Darth Sidious",
+      picture: "assets/images/ch-3.png",
+      healthPower : 150,
+      attackPower : 5,
+      counterAttackPower : 20,
+    });
+    fightersToPick.push({
+      name : "Darth Maul",
+      picture: "assets/images/ch-4.png",
+      healthPower : 180,
+      attackPower :6,
+      counterAttackPower : 25,
     });
 
-    //Create an "on-click" event attached to the ".enemies" class.
-    $(".enemies").on("click", function() {
+    //setting up the initial variables 
+    var wins = 0;
+    var playerCurrentHP = null;
+    var enemyCurrentHP = null; 
     
-    });
+    //function to get player and its attribute 
+    var getPlayer = function(name){
+        for (var i = 0; i < fightersToPick.length; i++) {
+          if(fightersToPick[i].name === name){
+            return fightersToPick[i];
+            console.log("fightersToPick[i]")
+          }
+        }
+    };
+    // function to get player when its name is not equals the name passes as the argument 
+    var getPlayersExcept = function(name, players){
+        var t = [];
+        for (var i = 0; i < players.length; i++) {
+          if(players[i].name != name){
+            t.push(players[i]); 
+          }
+        }
+        return t;
+    };
 
+    // The setupGame method is called when the page first loads.
+    var setupGame= function(){
+      // calling drawCharacter to each fighter in the container fightersToPick and applying fighter class 
+        drawCharacters(fightersToPick, $(".fightersToPick"), "fighters");
 
-    //Create an "on-click" event attached to the ".attack" class.
-    $(".attack").on("click", function() {
-    
-    });
+        $(".fighters").on("click", function(){
+        // calling drawCharacter to fighter clicked in the container yourCharacter and applying player class 
+            drawCharacter(getPlayer($(this).attr("name")), $(".yourCharacter"), "player");
+        // calling drawCharacter to fighter not clicked in the container yourCharacter and applying enemy class    
+            var defenders = getPlayersExcept($(this).attr("name"), fightersToPick);
+            drawCharacters(defenders, $(".enemies"), "enemy");
+        // calling drawCharacter to enemy clicked in the container enemies and applying defender class
+            $(".enemy").on("click", function(){
+              drawCharacter(getPlayer($(this).attr("name")), $(".defender"), "defenders");
+              $(".enemies").empty();
+              $(".enemies").append('Enemies Available To Attack');
+              drawCharacters(getPlayersExcept($(this).attr("name"), defenders), $(".enemies"), "enemy");
+            });
 
+            $(".fightersToPick").empty();
+        });
 
-    //Create an "on-click" event attached to the "#restart" button id.
-    $("#restart").on("click", function() {
-      // Inside the on-click event...
-      //Use the jQuery "empty()" method to clear the contents of the "#display" div.
-      $(".enemies").empty();
-      $(".defender").empty();
-
-    });
-
-    // Initialize the game when the page loads.
-    rpgGame.setupGame();
-
-
-     
-      //each times the player attack attack power increases by its base attack power like 6, 12, 18, 24, 30
-      //enemy character only has counter attack power and counter attack power doesnt change.
-      //player chooses a character by clicking fighter's pic 
-      //enemies moved to a different area of the screen 
-      //player chooses an opponnet - that is moves to a defender area 
-      //when attack clicked, opponnet hp lowers and display these pts at boottom of the defender's pic
-      //opponnet character counter attacks n player's HP lowers and these pts aare displayed at bottom of pic
-      //player keep hit attack button 
-      //defender' HP < or = 0 , remove enemy from defender area n player chooses new opponent 
-      //player wins by defeating all the enemy 
-      // player looses if their character's HP < or = 0  
-
-
+         $(".attack").on("click", function(){
+         var playerHP = ($(this).attr("data-hp"));
+         playerHP = parseInt(playerHP);
+         });
+    };
+//calling the main fuction of setting up page.
+    setupGame();
 });
 
